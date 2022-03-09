@@ -32,7 +32,7 @@ jobs:
           
       - name: Publish Conda package
         run: |
-          conda install conda-build conda-verify --yes
+          conda install anaconda-client --yes
           anaconda login --username $USERNAME --password $PASSWORD
           # anaconda upload --force --label main $HOME/conda-bld/*/*.tar.bz2
         env:
