@@ -21,11 +21,18 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: ${{ matrix.python-version }}
-
-      - name: Publish Conda package
+          
+      - name: Install Conda packages
         run: |
           conda install conda-build conda-verify --yes
           conda install anaconda-client --yes
+          anaconda --version
+        shell:
+          bash -l {0}
+          
+      - name: Publish Conda package
+        run: |
+          conda install conda-build conda-verify --yes
           anaconda login --username ${{env.USERNAME}} --password ${{env.PASSWORD}} 
    #       anaconda upload --force --label main $HOME/conda-bld/*/*.tar.bz2
         env:
