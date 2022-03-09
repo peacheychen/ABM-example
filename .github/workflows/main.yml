@@ -1,0 +1,33 @@
+name: Building Conda
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  conda-build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04]
+        python-version: [3.7, 3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Conda for Python ${{ matrix.python-version }}
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Publish Conda package
+        run: |
+          conda install anaconda-client --yes
+          anaconda login --username ${{env.USERNAME}} --password ${{env.PASSWORD}} 
+   #       anaconda upload --force --label main $HOME/conda-bld/*/*.tar.bz2
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+
